@@ -1,8 +1,9 @@
-package ba.etf.rma22.projekat
+package ba.etf.rma22.projekat.data.models
 
+import java.io.Serializable
 import java.util.*
 
-data class Anketa (
+data class Anketa  (
  var naziv: String,
  var nazivIstrazivanja: String,
  var datumPocetak: Date,
@@ -11,4 +12,4 @@ data class Anketa (
  var trajanje: Int,
  var nazivGrupe: String,
  var progres: Float
-)
+):Serializable

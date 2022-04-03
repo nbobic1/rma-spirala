@@ -2,11 +2,12 @@
 <androidx.cardview.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="128dp"
-    android:layout_height="172dp"
-    android:layout_marginEnd="8dp"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="8dp"
     app:cardCornerRadius="20dp">
-<LinearLayout android:layout_width="match_parent"
+<LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#71D375"
     android:orientation="vertical"
@@ -37,7 +38,7 @@
         android:id="@+id/rNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="50dp"
+        android:layout_marginVertical="20dp"
         android:text="TextView"
         android:textAlignment="center" />
 
@@ -45,8 +46,9 @@
         android:id="@+id/progresZavrsetka"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_margin="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginBottom="20dp"
         android:progress="50"
         android:scaleY="7"
         android:scrollbarSize="4dp" />
@@ -54,11 +56,8 @@
     <TextView
         android:id="@+id/date1"
         android:layout_width="match_parent"
-        android:layout_height="42dp"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginVertical="20dp"
+        android:layout_height="wrap_content"
         android:background="#00BCD4"
-        android:gravity="center"
         android:text="TextView"
         android:textAlignment="center" />
 

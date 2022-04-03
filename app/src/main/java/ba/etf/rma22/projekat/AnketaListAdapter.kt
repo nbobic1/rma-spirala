@@ -8,11 +8,14 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import ba.etf.rma22.projekat.data.models.Anketa
 import java.lang.Math.ceil
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
-class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemClicked: (anketa:Anketa) -> Unit) : RecyclerView.Adapter<AnketaListAdapter.AnketaViewHolder>() {
+class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemClicked: (anketa: Anketa) -> Unit) : RecyclerView.Adapter<AnketaListAdapter.AnketaViewHolder>() {
     var cal: Calendar = Calendar.getInstance()
 
 
@@ -29,15 +32,16 @@ class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemCl
         var date: Date = cal.time
         holder.itemView.setOnClickListener{ onItemClicked(anketaL[position]) }
         holder.anketaName.text = anketaL[position].naziv
-        val k: Double =ceil(anketaL[position].progres/0.2)*0.2*holder.anketaProgress.max;
+        val k: Double = kotlin.math.ceil(anketaL[position].progres / 0.2) *0.2*holder.anketaProgress.max;
         holder.anketaProgress.progress=k.roundToInt()
         holder.anketaRnum.text=anketaL[position].nazivIstrazivanja
         val context: Context = holder.anketaCircle.getContext()
         var id: Int=0
-        if(anketaL[position].progres.equals(1.0))
+        var dateFormat:DateFormat =  SimpleDateFormat("dd.MM.yyyy.")
+        if(anketaL[position].progres.compareTo(1.0)==0)
         {
         //plava
-            holder.anketaDatum.text="Anketa urađena: "+anketaL[position].datumRada
+            holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumRada)
             id= context.getResources()
                 .getIdentifier("plava", "drawable", context.getPackageName())
 
@@ -45,7 +49,7 @@ class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemCl
         else if(date<anketaL[position].datumPocetak)
         {
         //zuta
-            holder.anketaDatum.text="Anketa urađena: "+anketaL[position].datumPocetak
+            holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumPocetak)
             context.getResources()
                 .getIdentifier("zuta", "drawable", context.getPackageName())
 
@@ -53,7 +57,7 @@ class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemCl
         else if(date<anketaL[position].datumKraj)
         {
         //zelena
-            holder.anketaDatum.text="Anketa urađena: "+anketaL[position].datumKraj
+            holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumKraj)
             context.getResources()
                 .getIdentifier("zelena", "drawable", context.getPackageName())
 
@@ -61,11 +65,12 @@ class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemCl
         else
         {
          //crvena
-            holder.anketaDatum.text="Anketa urađena: "+anketaL[position].datumKraj
+            holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumKraj)
             context.getResources()
                 .getIdentifier("crvena", "drawable", context.getPackageName())
         }
         holder.anketaCircle.setImageResource(id)
+
     }
     fun updateAnkete(anketas: List<Anketa>) {
         this.anketaL = anketas
