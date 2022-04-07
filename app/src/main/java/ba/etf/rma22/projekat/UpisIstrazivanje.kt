@@ -26,21 +26,27 @@ class UpisIstrazivanje : AppCompatActivity() {
         upis=findViewById(R.id.dodajIstrazivanjeDugme)
         upis.isEnabled=false
         spin1=findViewById(R.id.odabirGodina)
-        var  arr= ArrayAdapter(this, android.R.layout.simple_spinner_item, (1..2023).toList().map { broj->broj.toString() })
+        var kow=((1..2023).toList().map { broj->broj.toString() }).toMutableList()
+        kow.add(" ")
+        var  arr= ArrayAdapter(this, android.R.layout.simple_spinner_item, kow)
         arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spin1.adapter=arr
+        if(korisnik.getGod()==-1)
+            spin1.setSelection(arr.getPosition(" "))
+        else
         spin1.setSelection(arr.getPosition(korisnik.getGod().toString()))
         spin2=findViewById(R.id.odabirIstrazivanja)
         spin3=findViewById(R.id.odabirGrupa)
        spin1.onItemSelectedListener=object:AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
-                if(p0!=null)
+                if(p0!=null&&(p0.getItemAtPosition(p2)as String)!=" ")
                 {
                     var lis=IstrazivanjaRepository.getIstrazivanjeByGodina((p0.getItemAtPosition(p2)as String).toInt()).toMutableList()
                     lis.removeAll(IstrazivanjaRepository.getUpisani())
                     lis.removeAll(korisnik.getI())
-                    var  arr1= ArrayAdapter(p0.context, android.R.layout.simple_spinner_item,lis.map { istar->istar.naziv })
+
+                    var  arr1= ArrayAdapter(p0.context, android.R.layout.simple_spinner_item,lis.map { istar->istar.naziv }.toMutableList())
                     arr1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin2.adapter=arr1
                     spin2.onItemSelectedListener=object:AdapterView.OnItemSelectedListener{
@@ -57,6 +63,13 @@ class UpisIstrazivanje : AppCompatActivity() {
                         }
                         override fun onNothingSelected(p0: AdapterView<*>?) {
                         }
+                    }
+                    if(lis.size==0)
+                    {
+                        var  arr2= ArrayAdapter(p0.context, android.R.layout.simple_spinner_item,mutableListOf<String>())
+                        arr2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        spin3.adapter=arr2
+                        upis.isEnabled=false
                     }
                 }
             }

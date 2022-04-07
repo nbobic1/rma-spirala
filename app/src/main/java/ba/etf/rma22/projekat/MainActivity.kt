@@ -59,9 +59,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         AnketaRepository.korisnik.setG( korisnikG())
-
-        AnketaRepository.korisnik.setGod( 2022)
-        IstrazivanjaRepository.korisnik.setGod(2022)
         IstrazivanjaRepository.korisnik.setI(korisnikI())
         spiner=findViewById(R.id.filterAnketa)
         var  arr= ArrayAdapter(this, android.R.layout.simple_spinner_item,arrSpin)

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma22.projekat.data.models.Anketa
 import java.lang.Math.ceil
@@ -42,35 +43,26 @@ class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemCl
         {
         //plava
             holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumRada)
-            id= context.getResources()
-                .getIdentifier("plava", "drawable", context.getPackageName())
-
+            holder.anketaCircle.background= getDrawable(context,R.drawable.plava)
         }
         else if(date<anketaL[position].datumPocetak)
         {
         //zuta
             holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumPocetak)
-            context.getResources()
-                .getIdentifier("zuta", "drawable", context.getPackageName())
-
+            holder.anketaCircle.background= getDrawable(context,R.drawable.zuta)
         }
         else if(date<anketaL[position].datumKraj)
         {
         //zelena
             holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumKraj)
-            context.getResources()
-                .getIdentifier("zelena", "drawable", context.getPackageName())
-
+            holder.anketaCircle.background= getDrawable(context,R.drawable.zelena)
         }
         else
         {
-         //crvena
+            //crvena
             holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumKraj)
-            context.getResources()
-                .getIdentifier("crvena", "drawable", context.getPackageName())
+            holder.anketaCircle.background= getDrawable(context,R.drawable.crvena)
         }
-        holder.anketaCircle.setImageResource(id)
-
     }
     fun updateAnkete(anketas: List<Anketa>) {
         this.anketaL = anketas

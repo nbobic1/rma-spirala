@@ -7,7 +7,7 @@ import java.io.Serializable
 import java.security.acl.Group
 
 class Korisnik :Serializable{
-    var godina:Int = 0
+    var godina:Int = -1
 
 
     var listaA:List<Anketa> = listOf()
