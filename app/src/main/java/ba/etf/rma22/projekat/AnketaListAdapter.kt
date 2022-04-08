@@ -33,7 +33,7 @@ class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemCl
         var date: Date = cal.time
         holder.itemView.setOnClickListener{ onItemClicked(anketaL[position]) }
         holder.anketaName.text = anketaL[position].naziv
-        val k: Double = kotlin.math.ceil(anketaL[position].progres / 0.2) *0.2*holder.anketaProgress.max;
+        val k: Double = kotlin.math.round(anketaL[position].progres / 0.2) *0.2*holder.anketaProgress.max;
         holder.anketaProgress.progress=k.roundToInt()
         holder.anketaRnum.text=anketaL[position].nazivIstrazivanja
         val context: Context = holder.anketaCircle.getContext()
@@ -48,19 +48,19 @@ class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemCl
         else if(date<anketaL[position].datumPocetak)
         {
         //zuta
-            holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumPocetak)
+            holder.anketaDatum.text="Vrijeme aktiviranja: "+dateFormat.format(anketaL[position].datumPocetak)
             holder.anketaCircle.background= getDrawable(context,R.drawable.zuta)
         }
         else if(date<anketaL[position].datumKraj)
         {
         //zelena
-            holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumKraj)
+            holder.anketaDatum.text="Vrijeme zatvaranja: "+dateFormat.format(anketaL[position].datumKraj)
             holder.anketaCircle.background= getDrawable(context,R.drawable.zelena)
         }
         else
         {
             //crvena
-            holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumKraj)
+            holder.anketaDatum.text="Anketa zatvorena: "+dateFormat.format(anketaL[position].datumKraj)
             holder.anketaCircle.background= getDrawable(context,R.drawable.crvena)
         }
     }

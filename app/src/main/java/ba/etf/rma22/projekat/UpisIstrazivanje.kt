@@ -26,7 +26,7 @@ class UpisIstrazivanje : AppCompatActivity() {
         upis=findViewById(R.id.dodajIstrazivanjeDugme)
         upis.isEnabled=false
         spin1=findViewById(R.id.odabirGodina)
-        var kow=((1..2023).toList().map { broj->broj.toString() }).toMutableList()
+        var kow=((1..5).toList().map { broj->broj.toString() }).toMutableList()
         kow.add(" ")
         var  arr= ArrayAdapter(this, android.R.layout.simple_spinner_item, kow)
         arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
