@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma22.projekat.data.models.Grupa
 import ba.etf.rma22.projekat.data.models.Istrazivanje
 import ba.etf.rma22.projekat.data.repositories.AnketaRepository
-import ba.etf.rma22.projekat.data.repositories.GrupaRepository
 import ba.etf.rma22.projekat.data.repositories.IstrazivanjaRepository
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
@@ -101,7 +100,7 @@ class MainActivity : AppCompatActivity() {
 
         adapterAnketa= AnketaListAdapter(listOf()){ anketa->{}}
         listaAnketa.adapter=adapterAnketa
-        upis=findViewById(R.id.dodajIstrazivanjeDugme)
+        upis=findViewById(R.id.upisDugme)
         upis.setOnClickListener{
             val intent = Intent(this, UpisIstrazivanje::class.java)
             intent.putExtra("korisnik",paketI(IstrazivanjaRepository.korisnik.getI()))
