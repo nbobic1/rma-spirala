@@ -48,7 +48,7 @@ class LayoutTest {
             )
         )
         Espresso.onView(withId(R.id.odabirGrupa)).check(ViewAssertions.matches(isCompletelyDisplayed()))
-        Espresso.onView(withId(R.id.upisDugme)).check(
+        Espresso.onView(withId(R.id.dodajIstrazivanjeDugme)).check(
             ViewAssertions.matches(
                 isCompletelyDisplayed()
             )
@@ -56,7 +56,7 @@ class LayoutTest {
 
         Espresso.onView(withId(R.id.odabirGodina)).check(isCompletelyAbove(withId(R.id.odabirIstrazivanja)))
         Espresso.onView(withId(R.id.odabirIstrazivanja)).check(isCompletelyAbove(withId(R.id.odabirGrupa)))
-        Espresso.onView(withId(R.id.odabirGrupa)).check(isCompletelyAbove(withId(R.id.upisDugme)))
+        Espresso.onView(withId(R.id.odabirGrupa)).check(isCompletelyAbove(withId(R.id.dodajIstrazivanjeDugme)))
 
     }
 

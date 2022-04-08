@@ -23,7 +23,7 @@ class UpisIstrazivanje : AppCompatActivity() {
         var korisnik:Korisnik = Korisnik()
         korisnik.setI((intent.extras!!["korisnik"] as paketI).gh)
         korisnik.setGod(intent.extras!!["godina"]as Int)
-        upis=findViewById(R.id.upisDugme)
+        upis=findViewById(R.id.dodajIstrazivanjeDugme)
         upis.isEnabled=false
         spin1=findViewById(R.id.odabirGodina)
         var kow=((1..5).toList().map { broj->broj.toString() }).toMutableList()
