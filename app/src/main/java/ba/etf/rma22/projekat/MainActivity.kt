@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ba.etf.rma22.projekat.data.models.Grupa
 import ba.etf.rma22.projekat.data.models.Istrazivanje
-import ba.etf.rma22.projekat.data.repositories.AnketaRepository
-import ba.etf.rma22.projekat.data.repositories.IstrazivanjaRepository
+import ba.etf.rma22.projekat.viewmodel.AnketaViewModel
+import ba.etf.rma22.projekat.viewmodel.IstrazivanjeViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapterAnketa:AnketaListAdapter
     private lateinit var spiner: Spinner
     private lateinit var upis: FloatingActionButton
+    private var korisnik:Korisnik = Korisnik()
+    private var anketaViewModel: AnketaViewModel =AnketaViewModel()
+    private var istrazivanjeViewModel:IstrazivanjeViewModel = IstrazivanjeViewModel()
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             // There are no request codes
@@ -31,18 +34,18 @@ class MainActivity : AppCompatActivity() {
                     var godina=data.getStringExtra("godina")
                 var itra=data.getStringExtra("istrazivanje")
                 var grupa=data.getStringExtra("grupa")
-                var kot=  IstrazivanjaRepository.korisnik.getI().toMutableList()
+                var kot=  istrazivanjeViewModel.getKori().getI().toMutableList()
                     kot.add(Istrazivanje(itra.toString(), godina.toString().toInt()))
-                        IstrazivanjaRepository.korisnik.setI(kot)
-                IstrazivanjaRepository.korisnik.setGod(godina.toString().toInt())
-                AnketaRepository.korisnik.setGod(godina.toString().toInt())
-
-                 var kot1=  AnketaRepository.korisnik.getG().toMutableList()
+                        korisnik.setI(kot)
+                korisnik.setGod(godina.toString().toInt())
+                istrazivanjeViewModel.setKori(korisnik)
+                 var kot1=  anketaViewModel.getKori().getG().toMutableList()
                 kot1.add(Grupa(grupa.toString(),itra.toString()))
-                AnketaRepository.korisnik.setG(kot1)
+                korisnik.setG(kot1)
+                anketaViewModel.setKori(korisnik)
                 if(spiner.selectedItem.toString()=="Sve moje ankete")
                 {
-                    adapterAnketa.updateAnkete(AnketaRepository.getMyAnkete())
+                    adapterAnketa.updateAnkete(anketaViewModel.getMyAnkete())
                 }
             }
         }
@@ -57,8 +60,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        AnketaRepository.korisnik.setG( korisnikG())
-        IstrazivanjaRepository.korisnik.setI(korisnikI())
+       korisnik.setG( korisnikG())
+        korisnik.setI(korisnikI())
+        anketaViewModel.setKori(korisnik)
         spiner=findViewById(R.id.filterAnketa)
         var  arr= ArrayAdapter(this, android.R.layout.simple_spinner_item,arrSpin)
         arr.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -71,23 +75,23 @@ class MainActivity : AppCompatActivity() {
                     println(p0.selectedItem.toString())
                     if(p0.selectedItem.toString() == "Sve moje ankete")
                     {
-                        adapterAnketa.updateAnkete(AnketaRepository.getMyAnkete())
+                        adapterAnketa.updateAnkete(anketaViewModel.getMyAnkete())
                     }
                     else if(p0.selectedItem.toString() == "Sve ankete")
                         {
-                            adapterAnketa.updateAnkete(AnketaRepository.getAll())
+                            adapterAnketa.updateAnkete(anketaViewModel.getAll())
                         }
                     else if(p0.selectedItem.toString()=="Urađene ankete")
                         {
-                            adapterAnketa.updateAnkete(AnketaRepository.getDone())
+                            adapterAnketa.updateAnkete(anketaViewModel.getDone())
                         }
                     else if(p0.selectedItem.toString()=="Buduće ankete")
                     {
-                        adapterAnketa.updateAnkete(AnketaRepository.getFuture())
+                        adapterAnketa.updateAnkete(anketaViewModel.getFuture())
                     }
                     else if(p0.selectedItem.toString()=="Prošle ankete")
                     {
-                        adapterAnketa.updateAnkete(AnketaRepository.getNotTaken())
+                        adapterAnketa.updateAnkete(anketaViewModel.getNotTaken())
                     }
                 }
             }
@@ -103,8 +107,8 @@ class MainActivity : AppCompatActivity() {
         upis=findViewById(R.id.upisDugme)
         upis.setOnClickListener{
             val intent = Intent(this, UpisIstrazivanje::class.java)
-            intent.putExtra("korisnik",paketI(IstrazivanjaRepository.korisnik.getI()))
-            intent.putExtra("godina",AnketaRepository.korisnik.getGod())
+            intent.putExtra("korisnik",paketI(istrazivanjeViewModel.getKori().getI()))
+            intent.putExtra("godina",anketaViewModel.getKori().getGod())
             resultLauncher.launch(intent)
         }
     }

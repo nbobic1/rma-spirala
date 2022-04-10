@@ -11,12 +11,16 @@ import android.widget.Button
 import android.widget.Spinner
 import ba.etf.rma22.projekat.data.repositories.GrupaRepository
 import ba.etf.rma22.projekat.data.repositories.IstrazivanjaRepository
+import ba.etf.rma22.projekat.viewmodel.GrupaViewModel
+import ba.etf.rma22.projekat.viewmodel.IstrazivanjeViewModel
 
 class UpisIstrazivanje : AppCompatActivity() {
     private lateinit var upis: Button
     private lateinit var spin1:Spinner
     private lateinit var spin2:Spinner
     private lateinit var spin3:Spinner
+    private var istrazivanjeViewModel :IstrazivanjeViewModel = IstrazivanjeViewModel()
+    private var grupaViewModel:GrupaViewModel =GrupaViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
          setContentView(R.layout.activity_upis_istrazivanje)
@@ -42,8 +46,8 @@ class UpisIstrazivanje : AppCompatActivity() {
 
                 if(p0!=null&&(p0.getItemAtPosition(p2)as String)!=" ")
                 {
-                    var lis=IstrazivanjaRepository.getIstrazivanjeByGodina((p0.getItemAtPosition(p2)as String).toInt()).toMutableList()
-                    lis.removeAll(IstrazivanjaRepository.getUpisani())
+                    var lis=istrazivanjeViewModel.getIstrazivanjeByGodina((p0.getItemAtPosition(p2)as String).toInt()).toMutableList()
+                    lis.removeAll(istrazivanjeViewModel.getUpisani())
                     lis.removeAll(korisnik.getI())
 
                     var  arr1= ArrayAdapter(p0.context, android.R.layout.simple_spinner_item,lis.map { istar->istar.naziv }.toMutableList())
@@ -54,11 +58,11 @@ class UpisIstrazivanje : AppCompatActivity() {
 
                             if(p0!=null)
                             {
-                                var  arr2= ArrayAdapter(p0.context, android.R.layout.simple_spinner_item,GrupaRepository.getGroupsByIstrazivanjet(p0.getItemAtPosition(p2) as String).map { istar->istar.naziv }
+                                var  arr2= ArrayAdapter(p0.context, android.R.layout.simple_spinner_item,grupaViewModel.getGroupsByIstrazivanjet(p0.getItemAtPosition(p2) as String).map { istar->istar.naziv }
                                 )
                                 arr2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                                 spin3.adapter=arr2
-                                upis.isEnabled=GrupaRepository.getGroupsByIstrazivanjet(p0.getItemAtPosition(p2) as String).isNotEmpty()
+                                upis.isEnabled=grupaViewModel.getGroupsByIstrazivanjet(p0.getItemAtPosition(p2) as String).isNotEmpty()
                             }
                         }
                         override fun onNothingSelected(p0: AdapterView<*>?) {
