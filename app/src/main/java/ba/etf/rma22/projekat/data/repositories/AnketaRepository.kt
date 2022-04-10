@@ -24,19 +24,19 @@ object AnketaRepository {
     }
 
     fun getDone(): List<Anketa>{
-            return ankete().filter { anketa -> anketa.progres.compareTo(1.0)==0 }
+            return getMyAnkete().filter { anketa -> anketa.progres.compareTo(1.0)==0 }
     }
     fun getFuture(): List<Anketa>{
         var cal: Calendar = Calendar.getInstance()
         cal.set(2022,4,10)
         var datum: Date = cal.time;
-        return ankete().filter { anketa ->anketa.datumPocetak>datum  }
+        return getMyAnkete().filter { anketa ->anketa.datumPocetak>datum  }
     }
     fun getNotTaken(): List<Anketa>{
         var cal: Calendar = Calendar.getInstance()
         cal.set(2022,4,10)
         var datum: Date = cal.time;
-        return ankete().filter { anketa ->anketa.progres.compareTo(1.0)!=0&&anketa.datumKraj<datum  }
+        return getMyAnkete().filter { anketa ->anketa.progres.compareTo(1.0)!=0&&anketa.datumKraj<datum  }
     }
 
 }
