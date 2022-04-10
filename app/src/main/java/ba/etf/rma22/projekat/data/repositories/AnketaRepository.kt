@@ -30,7 +30,7 @@ object AnketaRepository {
         var cal: Calendar = Calendar.getInstance()
         cal.set(2022,4,10)
         var datum: Date = cal.time;
-        return getMyAnkete().filter { anketa ->anketa.datumPocetak>datum  }
+        return getMyAnkete().filter { anketa ->anketa.datumPocetak>datum||(anketa.datumKraj>datum&&anketa.progres.compareTo(1.0)!=0)}
     }
     fun getNotTaken(): List<Anketa>{
         var cal: Calendar = Calendar.getInstance()
