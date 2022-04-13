@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var adapterAnketa:AnketaListAdapter
     private lateinit var spiner: Spinner
     private lateinit var upis: FloatingActionButton
-    private var korisnik:Korisnik = Korisnik()
+    private var korisnik:Korisnik =  Korisnik()
     private var anketaViewModel: AnketaViewModel =AnketaViewModel()
     private var istrazivanjeViewModel:IstrazivanjeViewModel = IstrazivanjeViewModel()
     var resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
