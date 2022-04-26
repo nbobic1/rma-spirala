@@ -28,13 +28,11 @@ object AnketaRepository {
     }
     fun getFuture(): List<Anketa>{
         var cal: Calendar = Calendar.getInstance()
-        cal.set(2022,4,15)
         var datum: Date = cal.time;
-        return getMyAnkete().filter { anketa ->anketa.datumPocetak>datum||(anketa.datumKraj>datum&&anketa.progres.compareTo(1.0)!=0)}
+        return getMyAnkete().filter { anketa ->anketa.datumPocetak>datum}
     }
     fun getNotTaken(): List<Anketa>{
         var cal: Calendar = Calendar.getInstance()
-        cal.set(2022,4,15)
         var datum: Date = cal.time;
         return getMyAnkete().filter { anketa ->anketa.progres.compareTo(1.0)!=0&&anketa.datumKraj<datum  }
     }

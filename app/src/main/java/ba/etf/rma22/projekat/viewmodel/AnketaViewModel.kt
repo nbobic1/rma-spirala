@@ -19,20 +19,26 @@ class AnketaViewModel {
     }
     fun getMyAnkete() : List<Anketa>
     {
-        return AnketaRepository.getMyAnkete();
+        var t= AnketaRepository.getMyAnkete().toMutableList()
+        t.addAll(getKori().getA())
+        return t.distinct()
     }
     fun getAll(): List<Anketa>
     {
-        return AnketaRepository.getAll();
+        return AnketaRepository.getAll()
     }
 
     fun getDone(): List<Anketa>{
-        return AnketaRepository.getDone();
+        return getMyAnkete().filter { anketa -> anketa.progres.compareTo(1.0)==0 }
     }
     fun getFuture(): List<Anketa>{
-        return AnketaRepository.getFuture()
+        var cal: Calendar = Calendar.getInstance()
+        var datum: Date = cal.time;
+        return getMyAnkete().filter { anketa ->anketa.datumPocetak>datum}
     }
     fun getNotTaken(): List<Anketa>{
-        return AnketaRepository.getNotTaken()
+        var cal: Calendar = Calendar.getInstance()
+        var datum: Date = cal.time;
+        return getMyAnkete().filter { anketa ->anketa.progres.compareTo(1.0)!=0&&anketa.datumKraj<datum  }
     }
 }

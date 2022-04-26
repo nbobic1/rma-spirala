@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.math.roundToInt
 
-class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemClicked: (anketa: Anketa) -> Unit) : RecyclerView.Adapter<AnketaListAdapter.AnketaViewHolder>() {
+class AnketaListAdapter (private var main:MainActivity, private var anketaL :List<Anketa>, private val onItemClicked: (anketa: Anketa) -> Unit) : RecyclerView.Adapter<AnketaListAdapter.AnketaViewHolder>() {
     var cal: Calendar = Calendar.getInstance()
 
 
@@ -29,10 +29,17 @@ class AnketaListAdapter (private var anketaL :List<Anketa>, private val onItemCl
     }
     override fun getItemCount(): Int = anketaL.size
     override fun onBindViewHolder(holder: AnketaViewHolder, position: Int) {
-        cal.set(2021,3,10)
+        holder.itemView.setOnClickListener {
+            if(main.anketaViewModel.getMyAnkete().contains(anketaL[position])&&!main.anketaViewModel.getFuture().contains(anketaL[position]))
+            {
+                if(main.anketaViewModel.getDone().contains(anketaL[position])||main.anketaViewModel.getNotTaken().contains(anketaL[position]))
+                main.pitanja(anketaL[position].naziv,anketaL[position].nazivIstrazivanja,anketaL[position].progres,1)
+                else
+                    main.pitanja(anketaL[position].naziv,anketaL[position].nazivIstrazivanja,anketaL[position].progres,0)
+            }
+        }
         var date: Date = cal.time
-        holder.itemView.setOnClickListener{ onItemClicked(anketaL[position]) }
-        holder.anketaName.text = anketaL[position].naziv
+       holder.anketaName.text = anketaL[position].naziv
         val k: Double = kotlin.math.round(anketaL[position].progres / 0.2) *0.2*holder.anketaProgress.max;
         holder.anketaProgress.progress=k.roundToInt()
         holder.anketaRnum.text=anketaL[position].nazivIstrazivanja
