@@ -32,10 +32,16 @@ class AnketaListAdapter (private var main:MainActivity, private var anketaL :Lis
         holder.itemView.setOnClickListener {
             if(main.anketaViewModel.getMyAnkete().contains(anketaL[position])&&!main.anketaViewModel.getFuture().contains(anketaL[position]))
             {
+
+                var k=main.korisnik.getOdg().map{t->t.anketa}
                 if(main.anketaViewModel.getDone().contains(anketaL[position])||main.anketaViewModel.getNotTaken().contains(anketaL[position]))
-                main.pitanja(anketaL[position].naziv,anketaL[position].nazivIstrazivanja,anketaL[position].progres,1)
+                main.pitanja(anketaL[position],1)
+                else if(k.contains(anketaL[position])&&main.korisnik.getOdg()[k.indexOf(anketaL[position])].progrs.compareTo(1.0f)==0)
+                {
+                    main.pitanja(anketaL[position],1)
+                }
                 else
-                    main.pitanja(anketaL[position].naziv,anketaL[position].nazivIstrazivanja,anketaL[position].progres,0)
+                    main.pitanja(anketaL[position],0)
             }
         }
         var date: Date = cal.time
@@ -46,7 +52,9 @@ class AnketaListAdapter (private var main:MainActivity, private var anketaL :Lis
         val context: Context = holder.anketaCircle.getContext()
         var id: Int=0
         var dateFormat:DateFormat =  SimpleDateFormat("dd.MM.yyyy.")
-        if(anketaL[position].progres.compareTo(1.0)==0)
+        var z=main.korisnik
+
+        if(anketaL[position].progres.compareTo(1.0)==0||(z.getOdg().map { t->t.anketa }.contains(anketaL[position])&&z.getOdg()[z.getOdg().map { t->t.anketa }.indexOf(anketaL[position])].predao))
         {
         //plava
             holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketaL[position].datumRada)

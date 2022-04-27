@@ -3,6 +3,7 @@ package ba.etf.rma22.projekat
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import ba.etf.rma22.projekat.data.models.Anketa
 import ba.etf.rma22.projekat.data.models.Pitanje
 import ba.etf.rma22.projekat.viewmodel.PitanjaAnketaViewModel
 
@@ -23,6 +24,13 @@ class ViewPagerAdapter(activity: AppCompatActivity):FragmentStateAdapter(activit
         fragments.removeAt(index)
         notifyItemChanged(index)
     }
+    fun pocetna()
+    {
+        fragments.clear()
+        fragments.addAll(listOf(FragmentAnkete.newInstance(),FragmentIstrazivanje.newInstance()))
+        notifyDataSetChanged()
+        (activity1 as MainActivity).update()
+    }
     fun promijeni2()
     {
         if(fragments[1]!is FragmentPoruka)
@@ -40,37 +48,64 @@ class ViewPagerAdapter(activity: AppCompatActivity):FragmentStateAdapter(activit
         fragments.clear()
         fragments.addAll(listOf(FragmentAnkete.newInstance(),FragmentPoruka.newInstance(1,s1,s2)))
         notifyDataSetChanged()
-        (activity1 as MainActivity).update()
     }
-    fun pitanja(t:String,t1:String,prog:Float,u :Int)
+    fun pitanja(t:String, t1:String, prog1:Float, anketa: Anketa, u :Int)
     {
-        println("u=${u}")
+        var prog=prog1
         grupa=t
         istrazivanje=t1
         fragments.clear()
        var viewmod= PitanjaAnketaViewModel()
+        var zu:Int=0
+        var z=(activity1 as MainActivity).korisnik
+        var u1:List<List<Int>> =listOf(listOf())
+        var pred:Boolean=u==1
+        if(z.getOdg().map { t->t.anketa }.contains(anketa))
+        {
+            u1=z.getOdg()[z.getOdg().map { t->t.anketa }.indexOf(anketa)].odgovor
+            prog=z.getOdg()[z.getOdg().map { t->t.anketa }.indexOf(anketa)].progrs
+            pred=z.getOdg()[z.getOdg().map { t->t.anketa }.indexOf(anketa)].predao
+        }
         for(i in viewmod.getPitanja(t,t1) )
         {
-            fragments.add(FragmentPitanje.newInstance(i,listOf(1),u==1))
+            if(zu<u1.size)
+            fragments.add(FragmentPitanje.newInstance(i,u1[zu],u==1))
+            else
+                fragments.add(FragmentPitanje.newInstance(i,listOf(),u==1))
+            zu++
         }
-        fragments.add(FragmentPredaj.newInstance(prog,u==1))
+        fragments.add(FragmentPredaj.newInstance(prog,pred))
         notifyDataSetChanged()
         (activity1 as MainActivity).update()
     }
-    fun pitanjaKraj(s1: String,s2: String) :List<List<Int>>
+    fun pitanjaKraj() :List<List<Int>>
     {
         var krtt= mutableListOf<List<Int>>()
         for(i in 0..(fragments.size-2))
         {
             krtt.add((fragments[i] as FragmentPitanje).odg())
-            println("i==${i}")
-            for(t in (fragments[i] as FragmentPitanje).odg())
-                println("to je to=${t}")
         }
-        predaj(s1,s2)
         return krtt
+    }
+    fun broj():Int
+    {
+        return fragments.size
     }
     override fun getItemCount(): Int {
         return fragments.size
+    }
+
+    fun upoti() {
+        if(fragments[fragments.size-1] is FragmentPredaj)
+        {
+            if((fragments[fragments.size-1]as FragmentPredaj).got!=true)
+            {
+                var t =pitanjaKraj()
+                var t1=pitanjaKraj().toMutableList()
+                t1.removeIf{t->t.size==0}
+                println("t=${t.size}  t1=${t1.size}")
+                (fragments[fragments.size-1]as FragmentPredaj).setPro(t1.size.toFloat()/t.size.toFloat())
+            }
+          }
     }
 }

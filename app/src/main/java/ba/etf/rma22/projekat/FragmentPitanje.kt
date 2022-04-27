@@ -22,8 +22,9 @@ class FragmentPitanje : Fragment() {
         pitanje=view.findViewById(R.id.tekstPitanja)
         odgovor=view.findViewById(R.id.odgovoriLista)
         dugme=view.findViewById(R.id.dugmeZaustavi)
-        if(gotova)
-            dugme.isEnabled=false
+        dugme.setOnClickListener {
+            (activity as MainActivity).zaustavi()
+        }
         pitanje.text=zet.tekst
         odgovor.adapter=StringAdapter(view.context,R.layout.string_adapter, zet.opcije,this)
 
