@@ -13,7 +13,7 @@ fun korisnikA():List<Anketa>
 }
 fun korisnikG():List<Grupa>
 {
-    return listOf(grupe()[0])
+    return listOf()//grupe()[0])
 }
 fun korisnikI():List<Istrazivanje>
 {

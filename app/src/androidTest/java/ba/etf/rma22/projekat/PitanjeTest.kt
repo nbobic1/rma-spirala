@@ -10,7 +10,7 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import ba.etf.rma22.projekat.data.repositories.AnketaRepository
-import ba.etf.rma22.projekat.data.repositories.PitanjeAnketaRepository
+import ba.etf.rma22.projekat.data.repositories.PitanjaAnketaRepository
 import org.hamcrest.CoreMatchers
 import org.hamcrest.core.AllOf.allOf
 import org.junit.Rule
@@ -30,10 +30,10 @@ class PitanjeTest {
         val ankete = AnketaRepository.getMyAnkete()
         onView(withId(R.id.listaAnketa)).perform(RecyclerViewActions.actionOnItem<RecyclerView.ViewHolder>(CoreMatchers.allOf(hasDescendant(withText(ankete[0].naziv)),
             hasDescendant(withText(ankete[0].nazivIstrazivanja))), click()))
-        val pitanja = PitanjeAnketaRepository.getPitanja(ankete[0].naziv, ankete[0].nazivIstrazivanja)
+        val pitanja = PitanjaAnketaRepository.getPitanja(ankete[0].naziv, ankete[0].nazivIstrazivanja)
         for ((indeks,pitanje) in pitanja.withIndex()) {
             onView(withId(R.id.pager)).perform(ViewPager2Actions.scrollToPosition(indeks))
-            onView(allOf(isDisplayed(),withId(R.id.tekstPitanja))).check(matches(withText(pitanja[indeks].tekst)))
+            onView(allOf(isDisplayed(),withId(R.id.tekstPitanja))).check(matches(withText(pitanja[indeks].tekstPitanja)))
         }
     }
 

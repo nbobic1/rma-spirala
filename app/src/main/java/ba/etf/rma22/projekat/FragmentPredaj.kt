@@ -27,10 +27,8 @@ class FragmentPredaj : Fragment() {
         progres.text="${k1}%"
         return view
     }
-    fun setPro(pro:Float)
+    fun setPro(k1:Int)
     {
-        val k: Double = kotlin.math.round(pro / 0.2) *20
-        var k1=k.roundToInt()
         progres.text="${k1}%"
     }
     companion object {

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 
 class FragmentPoruka : Fragment() {
+
     var tec:String=""
     var tec1:String=""
     var tec2:Int=0

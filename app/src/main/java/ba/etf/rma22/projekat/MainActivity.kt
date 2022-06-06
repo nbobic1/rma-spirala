@@ -4,16 +4,20 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.widget.Toast
 import androidx.viewpager2.widget.ViewPager2
 import ba.etf.rma22.projekat.data.models.Anketa
-import ba.etf.rma22.projekat.data.models.Odgovor
-import ba.etf.rma22.projekat.viewmodel.AnketaViewModel
-import ba.etf.rma22.projekat.viewmodel.GrupaViewModel
-import ba.etf.rma22.projekat.viewmodel.IstrazivanjeViewModel
+import ba.etf.rma22.projekat.data.models.AnketaTaken
+import ba.etf.rma22.projekat.data.models.Odgovor1
+import ba.etf.rma22.projekat.viewmodel.*
 import java.util.*
-
 class MainActivity : AppCompatActivity() {
-    var call = object : ViewPager2.OnPageChangeCallback() {
+    var aT:AnketaTaken=AnketaTaken(1,0,"",null,1,"")
+    var anketaViewModel: AnketaViewModel = AnketaViewModel()
+    var odgovorViewModel=OdgovorViewModel()
+    var istrazivanjeIGrupaViewModel=IstrazivanjeIGrupaViewModel()
+    var pitanjeAnketaViewModel=PitanjeAnketaViewModel()
+     var call = object : ViewPager2.OnPageChangeCallback() {
         override fun onPageSelected(position: Int) {
             if (position==0)
                 Handler(Looper.getMainLooper()).postDelayed({
@@ -21,7 +25,9 @@ class MainActivity : AppCompatActivity() {
                 }, 500)
             else if(position==k.broj()-1)
             {
-                k.upoti()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    k.upoti()
+                }, 500)
             }
         }
     }
@@ -30,21 +36,35 @@ class MainActivity : AppCompatActivity() {
     var korisnik:Korisnik =  Korisnik()
     var asrg=""
     var asrg1=""
-    var args2=Anketa("","", Date(),Date(),Date(),0,"",0.0f)
+    var args2=Anketa(0,"","", Date(),Date(),Date(),0,"",0.0f,null)
     var istrazivanjeViewModel : IstrazivanjeViewModel = IstrazivanjeViewModel()
     var grupaViewModel: GrupaViewModel = GrupaViewModel()
-        var anketaViewModel: AnketaViewModel = AnketaViewModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main)
-        korisnik.setG( korisnikG())
+       /* korisnik.setG( korisnikG())
         korisnik.setI(korisnikI())
         anketaViewModel.setKori(korisnik)
-        istrazivanjeViewModel.setKori(korisnik)
+        istrazivanjeViewModel.setKori(korisnik)*/
       viewPager=findViewById(R.id.pager)
 
         viewPager.registerOnPageChangeCallback(call)
         viewPager.adapter=k
+    }
+    fun onSuccess(movies:List<Anketa>){
+        val toast = Toast.makeText(viewPager.context, "Upcoming movies found", Toast.LENGTH_SHORT)
+        toast.show()
+           println(movies.size)
+        println("=algjal===============jgal")
+        /* for(i in movies)
+        {
+            println(i.naziv)
+        }*/
+    }
+    fun onError() {
+        val toast = Toast.makeText(viewPager.context, "Search error", Toast.LENGTH_SHORT)
+        toast.show()
+        println("error")
     }
     override fun onDestroy() {
         viewPager.unregisterOnPageChangeCallback(call)
@@ -52,7 +72,8 @@ class MainActivity : AppCompatActivity() {
     }
     override fun onBackPressed()
     {
-       if(k.fragments[k.fragments.size-1] is FragmentPredaj)
+
+        if(k.fragments[k.fragments.size-1] is FragmentPredaj)
         {
             zaustavi()
        }
@@ -70,12 +91,14 @@ class MainActivity : AppCompatActivity() {
         println("update")
     }
 
-    fun pitanja(a: Anketa, u:Int)
+    fun pitanja(a:Anketa,nazivIstra:String,a1:AnketaTaken, u:Int)
     {
+        println("PITANJAAA")
         asrg=a.naziv
-        asrg1=a.nazivIstrazivanja
+        asrg1=nazivIstra
         args2=a
-        k.pitanja(a.naziv,a.nazivIstrazivanja,a.progres,a,u)
+        k.pitanja(a.naziv,nazivIstra,a1.progres.toFloat()/100,a,a1,u)
+        aT=a1
     }
     fun pitanjaKraj()
     {
@@ -86,7 +109,7 @@ class MainActivity : AppCompatActivity() {
             var lis2=k.pitanjaKraj()
             var k1:Int=lis.map { t->t.anketa }.indexOf(args2)
             println("setam k1=${k1}")
-            lis[k1]=Odgovor(args2,lis2,1.0f,true)
+            lis[k1]=Odgovor1(args2,lis2,1.0f,true)
             korisnik.setOdg(lis)
             anketaViewModel.setKori(korisnik)
             istrazivanjeViewModel.setKori(korisnik)
@@ -95,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         {
             var lis=korisnik.getOdg().toMutableList()
             var lis2=k.pitanjaKraj()
-            lis.add(Odgovor(args2,lis2,1.0f,true))
+            lis.add(Odgovor1(args2,lis2,1.0f,true))
             println("dodajem odg")
             korisnik.setOdg(lis)
             anketaViewModel.setKori(korisnik)
@@ -130,7 +153,7 @@ class MainActivity : AppCompatActivity() {
             var lis3=lis2.toMutableList()
                 lis3.removeIf { t->t.size==0 }
             var z:Float=((lis3.size.toFloat())/((k.broj().toFloat()-1.0f)))
-            lis[k1]=Odgovor(args2,lis2,z,false)
+            lis[k1]=Odgovor1(args2,lis2,z,false)
             korisnik.setOdg(lis)
             anketaViewModel.setKori(korisnik)
             istrazivanjeViewModel.setKori(korisnik)
@@ -143,7 +166,7 @@ class MainActivity : AppCompatActivity() {
             lis3.removeIf { t->t.size==0 }
 
             var z:Float=((lis3.size.toFloat())/((k.broj().toFloat()-1.0f)))
-            lis.add(Odgovor(args2,lis2,z,false))
+            lis.add(Odgovor1(args2,lis2,z,false))
             korisnik.setOdg(lis)
             anketaViewModel.setKori(korisnik)
             istrazivanjeViewModel.setKori(korisnik)

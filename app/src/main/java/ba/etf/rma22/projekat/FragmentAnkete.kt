@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ba.etf.rma22.projekat.data.models.Anketa
 import ba.etf.rma22.projekat.viewmodel.AnketaViewModel
 import ba.etf.rma22.projekat.viewmodel.IstrazivanjeViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -43,23 +44,24 @@ class FragmentAnkete :Fragment() {
                     println(p0.selectedItem.toString())
                     if(p0.selectedItem.toString() == "Sve moje ankete")
                     {
-                        adapterAnketa.updateAnkete(main.anketaViewModel.getMyAnkete())
+                       main.anketaViewModel.getUpisane(onSuccess = ::updateAdapter, onError=::onError)
                     }
                     else if(p0.selectedItem.toString() == "Sve ankete")
                     {
-                        adapterAnketa.updateAnkete(main.anketaViewModel.getAll())
+                      main.anketaViewModel.getAll(onSuccess = ::updateAdapter, onError=::onError)
                     }
                     else if(p0.selectedItem.toString()=="Urađene ankete")
                     {
-                        adapterAnketa.updateAnkete(main.anketaViewModel.getDone())
+                        main.anketaViewModel.getUradjene(onSuccess = ::updateAdapter, onError=::onError)
+
                     }
                     else if(p0.selectedItem.toString()=="Buduće ankete")
                     {
-                        adapterAnketa.updateAnkete(main.anketaViewModel.getFuture())
+                        main.anketaViewModel.getBuduce(onSuccess = ::updateAdapter, onError=::onError)
                     }
                     else if(p0.selectedItem.toString()=="Prošle ankete")
                     {
-                        adapterAnketa.updateAnkete(main.anketaViewModel.getNotTaken())
+                        main.anketaViewModel.getProsle(onSuccess = ::updateAdapter, onError=::onError)
                     }
                 }
             }
@@ -73,6 +75,15 @@ class FragmentAnkete :Fragment() {
         adapterAnketa= AnketaListAdapter(main,listOf()){ anketa->{}}
         listaAnketa.adapter=adapterAnketa
         return view
+    }
+    fun updateAdapter(a:List<Anketa>)
+    {
+        adapterAnketa.updateAnkete(a)
+    }
+
+    fun onError()
+    {
+        println("problem s API")
     }
 
     companion object {

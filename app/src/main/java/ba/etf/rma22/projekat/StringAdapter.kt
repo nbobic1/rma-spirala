@@ -2,6 +2,7 @@ package ba.etf.rma22.projekat
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,11 +24,23 @@ class StringAdapter(context: Context, @LayoutRes private val layoutResource: Int
         newView.setOnClickListener {
             if(!main.gotova){
                 textView.setTextColor(Color.parseColor("#0000ff"))
-                main.odgovor1.add(position)
-            }
+                main.odgovor1=position
+                var t:Int=(main.activity as MainActivity).k.fragments.indexOf(main)
+                (main.activity as MainActivity).odgovorViewModel.postaviOdgovorAnketa((main.activity as MainActivity).aT.id,main.zet.id,position, onError = ::postavProg)
+
+               }
         }
-        if(main.lis.contains(position))
+
+        if(main.lis==position)
             textView.setTextColor(Color.parseColor("#0000ff"))
         return newView
+    }
+    fun postavProg(pro:Int)
+    {
+        var upo=(main.activity as MainActivity).k
+        if(upo.fragments.size>0&&upo.fragments[upo.fragments.size-1] is FragmentPredaj)
+        {
+            (upo.fragments[upo.fragments.size-1]as FragmentPredaj).setPro(pro)
+        }
     }
 }

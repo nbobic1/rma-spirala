@@ -1,16 +1,14 @@
 package ba.etf.rma22.projekat
 
-import android.view.View
 import ba.etf.rma22.projekat.data.models.Anketa
 import ba.etf.rma22.projekat.data.models.Grupa
 import ba.etf.rma22.projekat.data.models.Istrazivanje
-import ba.etf.rma22.projekat.data.models.Odgovor
+import ba.etf.rma22.projekat.data.models.Odgovor1
 import java.io.Serializable
-import java.security.acl.Group
 
 class Korisnik :Serializable{
     var godina:Int = -1
-var odgovori:List<Odgovor> =listOf()
+var odgovori:List<Odgovor1> =listOf()
 
     var listaA:List<Anketa> = listOf()
 
@@ -25,11 +23,11 @@ var odgovori:List<Odgovor> =listOf()
     {
         godina=a
     }
-    fun setOdg(a:List<Odgovor>)
+    fun setOdg(a:List<Odgovor1>)
     {
         odgovori=a
     }
-    fun getOdg():List<Odgovor>
+    fun getOdg():List<Odgovor1>
     {
         return odgovori
     }

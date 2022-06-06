@@ -1,5 +1,6 @@
 package ba.etf.rma22.projekat
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,9 @@ class FragmentIstrazivanje:Fragment() {
     private lateinit var spin2: Spinner
     private lateinit var spin3: Spinner
   private lateinit var main:MainActivity
+  var indi=mutableListOf<Istrazivanje>()
+
+    var indi1=mutableListOf<Grupa>()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         main=(activity as MainActivity)
         var view=inflater.inflate(R.layout.activity_upis_istrazivanje,container,false)
@@ -40,34 +44,20 @@ class FragmentIstrazivanje:Fragment() {
 
                 if(p0!=null&&(p0.getItemAtPosition(p2)as String)!=" ")
                 {
-                    var lis=main.istrazivanjeViewModel.getIstrazivanjeByGodina((p0.getItemAtPosition(p2)as String).toInt()).toMutableList()
-                    lis.removeAll(main.istrazivanjeViewModel.getUpisani())
-                    lis.removeAll(main.korisnik.getI())
-
-                    var  arr1= ArrayAdapter(p0.context, android.R.layout.simple_spinner_item,lis.map { istar->istar.naziv }.toMutableList())
-                    arr1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                    spin2.adapter=arr1
+                   main.istrazivanjeIGrupaViewModel.getNeupisanaIstrazivanjaZaGod((p0.getItemAtPosition(p2)as String).toInt(),
+                       onSuccess = ::postaviSpin2,onError=::onError,p0.context)
+                    println("eeeeeeeeee=${(p0.getItemAtPosition(p2)as String).toInt()}")
                     spin2.onItemSelectedListener=object: AdapterView.OnItemSelectedListener{
                         override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
                             if(p0!=null)
                             {
-                                var  arr2= ArrayAdapter(p0.context, android.R.layout.simple_spinner_item,main.grupaViewModel.getGroupsByIstrazivanjet(p0.getItemAtPosition(p2) as String).map { istar->istar.naziv }
-                                )
-                                arr2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                                spin3.adapter=arr2
-                                upis.isEnabled=main.grupaViewModel.getGroupsByIstrazivanjet(p0.getItemAtPosition(p2) as String).isNotEmpty()
+                                if(indi.size>p2)
+                                main.istrazivanjeIGrupaViewModel.getGrupeZaIstrazivanje(indi.get(p2).id, onSuccess = ::postaviSpin3,onError=::onError,p0.context)
                             }
                         }
                         override fun onNothingSelected(p0: AdapterView<*>?) {
                         }
-                    }
-                    if(lis.size==0)
-                    {
-                        var  arr2= ArrayAdapter(p0.context, android.R.layout.simple_spinner_item,mutableListOf<String>())
-                        arr2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                        spin3.adapter=arr2
-                        upis.isEnabled=false
                     }
                 }
             }
@@ -75,24 +65,45 @@ class FragmentIstrazivanje:Fragment() {
             }
         }
         upis.setOnClickListener{
-            var tut=(activity as MainActivity)
-            var godina=spin1.selectedItem.toString()
-            var itra=spin2.selectedItem.toString()
-            var kot=  main.istrazivanjeViewModel.getKori().getI().toMutableList()
-            kot.add(Istrazivanje(itra.toString(), godina.toString().toInt()))
-            main.korisnik.setI(kot.distinct())
-            main.korisnik.setGod(godina.toString().toInt())
-            var kot1=  main.anketaViewModel.getKori().getG().toMutableList()
-            kot1.add(Grupa(spin3.selectedItem.toString(),itra.toString()))
-            main.korisnik.setG(kot1)
-            main.istrazivanjeViewModel.setKori(main.korisnik)
-            main.anketaViewModel.setKori(main.korisnik)
-            tut.k.grupa=spin3.selectedItem.toString()
-            tut.k.istrazivanje=itra
-            tut.promie(0)
 
+            main.istrazivanjeIGrupaViewModel.upisiUGrupu(indi1.get(spin3.selectedItemPosition).id, onSuccess = ::onSuccess,onError = ::onError)
+            main.k.grupa=spin3.selectedItem.toString()
+            main.k.istrazivanje=spin2.selectedItem.toString()
+
+            main.promie(0)
         }
         return view
+    }
+    fun onError()
+    {
+        println("problem s API")
+    }
+    fun postaviSpin2(a:List<Istrazivanje>,con:Context)
+    {
+        var  arr1= ArrayAdapter(con, android.R.layout.simple_spinner_item,a.map { istar->istar.naziv }.toMutableList())
+        arr1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spin2.adapter=arr1
+        indi=a.toMutableList()
+        if(a.size==0)
+        {
+            var  arr2= ArrayAdapter(con, android.R.layout.simple_spinner_item,mutableListOf<String>())
+            arr2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spin3.adapter=arr2
+            upis.isEnabled=false
+        }
+    }
+    fun postaviSpin3(a:List<Grupa>,con:Context) {
+       indi1=a.toMutableList()
+        var  arr2= ArrayAdapter(con, android.R.layout.simple_spinner_item,a.map { istar->istar.naziv }
+        )
+        arr2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spin3.adapter=arr2
+        upis.isEnabled=a.isNotEmpty()
+
+    }
+    fun onSuccess(a:Boolean)
+    {
+
     }
     companion object {
         fun newInstance(): FragmentIstrazivanje = FragmentIstrazivanje() }

@@ -6,6 +6,6 @@ import java.io.Serializable
 
 object GrupaRepository : Serializable {
     fun getGroupsByIstrazivanjet(nazivIstrazivanja:String) : List<Grupa>{
-        return grupe().filter { grupa ->grupa.nazivIstrazivanja==nazivIstrazivanja  }
+        return grupe()//.filter { grupa ->grupa.nazivIstrazivanja==nazivIstrazivanja  }
     }
 }

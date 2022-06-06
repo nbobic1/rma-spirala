@@ -1,3 +1,5 @@
 package ba.etf.rma22.projekat.data.models
 
-data class Odgovor(var anketa: Anketa,var odgovor: List<List<Int>>,var progrs:Float,var predao:Boolean)
+import com.google.gson.annotations.SerializedName
+
+data class Odgovor(@SerializedName("id") var id:Int,@SerializedName("odgovoreno")  var odgovoreno:Int)
