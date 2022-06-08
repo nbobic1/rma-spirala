@@ -69,13 +69,19 @@ class AnketaListAdapter (private var main:MainActivity, private var anketaL :Lis
         if(a.size==b.size)
         {
             //plava
+                if(anketa.datumRada!=null)
               holder.anketaDatum.text="Anketa urađena: "+dateFormat.format(anketa.datumRada)
+            else
+                    holder.anketaDatum.text="Anketa urađena: "
             holder.anketaCircle.background= getDrawable(context,R.drawable.plava)
         }
         else if(date<anketa.datumPocetak)
         {
             //zuta
+                if(anketa.datumPocetak!=null)
             holder.anketaDatum.text="Vrijeme aktiviranja: "+dateFormat.format(anketa.datumPocetak)
+            else
+                    holder.anketaDatum.text="Vrijeme aktiviranja: "
             holder.anketaCircle.background= getDrawable(context,R.drawable.zuta)
         }
         else if((anketa.datumKraj==null&&anketa.datumPocetak<date)||date<anketa.datumKraj)

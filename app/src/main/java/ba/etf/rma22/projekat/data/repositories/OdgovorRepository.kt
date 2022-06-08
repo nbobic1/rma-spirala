@@ -6,6 +6,7 @@ import ba.etf.rma22.projekat.data.models.Pitanje
 import ba.etf.rma22.projekat.data.models.Pos
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.Exception
 import kotlin.math.roundToInt
 
 object OdgovorRepository {
@@ -14,8 +15,18 @@ object OdgovorRepository {
 
         return withContext(Dispatchers.IO) {
             var kralj=ApiAdapter.retrofit.getPoceteAnkete(AccountRepository.getHash())
-            var t= kralj.body()?.last { i->i.AnketumId==idAnkete }?.id
-            if (t==null)
+            var t=-1
+            if(kralj.body()!=null) {
+                try{
+                    if(null!=kralj.body()?.last { i -> i.AnketumId == idAnkete })
+                        t= kralj.body()?.last { i -> i.AnketumId == idAnkete }?.id!!
+                }
+                catch ( e:Exception)
+                {
+
+                }
+                }
+            if (t==-1)
             {
                 return@withContext listOf()
             }

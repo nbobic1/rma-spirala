@@ -52,23 +52,13 @@ class ViewPagerAdapter(activity: AppCompatActivity):FragmentStateAdapter(activit
         fragments.addAll(listOf(FragmentAnkete.newInstance(),FragmentPoruka.newInstance(1,s1,s2)))
         notifyDataSetChanged()
     }
-    fun pitanja(t:String, t1:String, prog1:Float, anketa: Anketa,anketaTaken: AnketaTaken, u :Int)
+    fun pitanja(t:String, t1:String, prog1:Int, anketa: Anketa,anketaTaken: AnketaTaken, u :Int)
     {
         var prog=prog1
         grupa=t
         istrazivanje=t1
         fragments.clear()
-       var viewmod= PitanjaAnketaViewModel()
-        var zu:Int=0
-        var z=(activity1 as MainActivity).korisnik
-        var u1:List<List<Int>> =listOf(listOf())
         var pred:Boolean=u==1
-       /* if(z.getOdg().map { t->t.anketa }.contains(anketa))
-        {
-            u1=z.getOdg()[z.getOdg().map { t->t.anketa }.indexOf(anketa)].odgovor
-            prog=z.getOdg()[z.getOdg().map { t->t.anketa }.indexOf(anketa)].progrs
-            pred=z.getOdg()[z.getOdg().map { t->t.anketa }.indexOf(anketa)].predao
-        }*/
 
         var ert=OdgovorViewModel()
         ert.crrrnEnterrijerr(anketa.id,anketaTaken.id, onSuccess = ::sucPitanja, onError = ::onError,pred, prog,u)
@@ -77,15 +67,15 @@ class ViewPagerAdapter(activity: AppCompatActivity):FragmentStateAdapter(activit
     {
         println("problem s API")
     }
-    fun sucPitanja(a:List<Pitanje>,u1:List<Odgovor> ,pred:Boolean,prog:Float,u:Int)
+    fun sucPitanja(a:List<Pitanje>,u1:List<Odgovor> ,pred:Boolean,prog:Int,u:Int)
     {
             println("uisize=${u1.size}")
         var zu:Int=0
         for(i in a )
         {
-            if(zu<u1.size) {
-                println("u1=======${u1[zu].id}=${u1[zu].odgovoreno}!${zu}")
-                fragments.add(FragmentPitanje.newInstance(i, u1[zu].odgovoreno, u == 1))
+            if(u1.any { t->t.pitanjeId==i.id })
+            {
+                fragments.add(FragmentPitanje.newInstance(i, u1.last { t->t.pitanjeId==i.id }.odgovoreno, u == 1))
             } else
                 fragments.add(FragmentPitanje.newInstance(i,-1,u==1))
             zu++

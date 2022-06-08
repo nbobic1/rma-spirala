@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         asrg=a.naziv
         asrg1=nazivIstra
         args2=a
-        k.pitanja(a.naziv,nazivIstra,a1.progres.toFloat()/100,a,a1,u)
+        k.pitanja(a.naziv,nazivIstra,a1.progres,a,a1,u)
         aT=a1
     }
     fun pitanjaKraj()

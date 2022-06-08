@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlin.math.roundToInt
 
 class FragmentPredaj : Fragment() {
-    var prog:Float=0.0f
+    var prog:Int=0
     var got=false
     private lateinit var progres: TextView
     private lateinit var dugme: Button
@@ -22,17 +22,17 @@ class FragmentPredaj : Fragment() {
             dugme.isEnabled=false
         dugme.setOnClickListener { (activity as MainActivity).pitanjaKraj() }
         progres=view.findViewById(R.id.progresTekst)
-        val k: Double = kotlin.math.round(prog / 0.2) *20
-        var k1=k.roundToInt()
-        progres.text="${k1}%"
+        progres.text="${prog}%"
         return view
     }
     fun setPro(k1:Int)
     {
+        prog=k1
+        if(::progres.isInitialized)
         progres.text="${k1}%"
     }
     companion object {
-        fun newInstance(zu:Float,u:Boolean): FragmentPredaj {
+        fun newInstance(zu:Int,u:Boolean): FragmentPredaj {
             var t=FragmentPredaj()
                 t.prog=zu
             t.got=u

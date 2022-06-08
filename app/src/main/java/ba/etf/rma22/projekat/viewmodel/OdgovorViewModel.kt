@@ -34,8 +34,9 @@ class OdgovorViewModel {
         // Create a new coroutine on the UI thread
         scope.launch{
             // Make the network call and suspend execution until it finishes
-            val result =k.getOdgovoriAnketa(kid)
-            val result1=paRep.getPitanja(kid)
+            val result =k.getOdgovoriAnketa(anketa.id)
+            val result1=paRep.getPitanja(anketa.id)
+            println("pitanja ${result1.size}  odgovori ${result.size} ankea=${anketa.id}")
             // Display result of the network request to the user
             withContext(Dispatchers.Main) {
                 when (result) {
@@ -55,13 +56,13 @@ class OdgovorViewModel {
             }
         }
     }
-    fun crrrnEnterrijerr(id:Int,kid:Int, onSuccess: (pitanja:List<Pitanje>, odgovori: List<Odgovor>,pred:Boolean,prog:Float,u:Int) -> Unit,
-                         onError: () -> Unit,pred1:Boolean,prog1:Float,u1:Int){
+    fun crrrnEnterrijerr(id:Int,kid:Int, onSuccess: (pitanja:List<Pitanje>, odgovori: List<Odgovor>,pred:Boolean,prog:Int,u:Int) -> Unit,
+                         onError: () -> Unit,pred1:Boolean,prog1:Int,u1:Int){
         var paRep=PitanjeAnketaRepository
         // Create a new coroutine on the UI thread
         scope.launch{
             // Make the network call and suspend execution until it finishes
-            val result1 =k.getOdgovoriAnketa(kid)
+            val result1 =k.getOdgovoriAnketa(id)
             println("oodg kid=${kid}  %%${result1.size}")
             val result=paRep.getPitanja(id)
             // Display result of the network request to the user
