@@ -13,12 +13,17 @@ object OdgovorRepository {
     {
 
         return withContext(Dispatchers.IO) {
-            var response = ApiAdapter.retrofit.getOdgovoriAnketa(AccountRepository.getHash(),idAnkete)
+            var kralj=ApiAdapter.retrofit.getPoceteAnkete(AccountRepository.getHash())
+            var t= kralj.body()?.last { i->i.AnketumId==idAnkete }?.id
+            if (t==null)
+            {
+                return@withContext listOf()
+            }
+            var response = ApiAdapter.retrofit.getOdgovoriAnketa(AccountRepository.getHash(),t)
 
             val responseBody = response.body()
             if (responseBody==null)
             {
-                println("odgovori null")
                 return@withContext listOf()
             }
                 return@withContext responseBody!!
@@ -39,11 +44,19 @@ object OdgovorRepository {
             }
             if(z!=null) {
                 var gk=1+z.indexOf(z.last { i->i.id==idPitanje })
-                var k: Double = kotlin.math.round((gk.toDouble() / z.size.toDouble()) / 0.2)
+                    progres=0;
+                var k =((gk.toDouble() / z.size.toDouble())*100).toInt()
 
-                k= Math.round(k).toDouble()
-                println("k=${k}")
-                progres = k.roundToInt() * 20
+                while(progres !=100)
+                {
+                    if(k-progres<progres+20-k) {
+                        break
+                    }
+                    else if(progres>k)
+                        break
+                    progres+=20
+                }
+                println("progres=${progres}")
                 println("goagioagaagga ${gk} ${z.size} ${progres} ${kotlin.math.round(2.5)} ${kotlin.math.round(2.51)}")
             }
                 var response = ApiAdapter.retrofit.postaviOdgovorAnketa(AccountRepository.getHash(),idAnketaTaken,Pos(odgovor,idPitanje,progres))
