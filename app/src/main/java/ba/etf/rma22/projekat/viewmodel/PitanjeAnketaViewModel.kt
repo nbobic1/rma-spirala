@@ -1,5 +1,6 @@
 package ba.etf.rma22.projekat.viewmodel
 
+import ba.etf.rma22.projekat.MainActivity
 import ba.etf.rma22.projekat.data.models.*
 import ba.etf.rma22.projekat.data.repositories.*
 import kotlinx.coroutines.*
@@ -56,7 +57,7 @@ class PitanjeAnketaViewModel {
             }
             for(i in moj)
             {
-                if(i.datumKraj!=null&&i.datumKraj<date)
+                if(i.datumKraj!=null&& i.datumKraj!! <date)
                 {
                     por.add(i)
                 }
@@ -66,7 +67,7 @@ class PitanjeAnketaViewModel {
             var pros= mutableListOf<Anketa>()
             for (i in moj)
             {
-                if(i.datumKraj!=null&&i.datumKraj<date)
+                if(i.datumKraj!=null&& i.datumKraj!! <date)
                 {
                     var er= TakeAnketaRepository.getPoceteAnkete()
                     if(er!=null)
@@ -91,7 +92,13 @@ class PitanjeAnketaViewModel {
 }
              if(ut==-1)
             {
-                var gh=TakeAnketaRepository.zapocniAnketu(id)
+                if(!MainActivity.connection)
+                {
+                    withContext(Dispatchers.Main) {
+                        onSuccess?.invoke(moj,bud,por,pros,pitanja, odgovoir, AnketaTaken(0,0,"",null,1,""),-3,str)
+                          }
+                }
+                    var gh=TakeAnketaRepository.zapocniAnketu(id)
                 if(gh!=null)
                 withContext(Dispatchers.Main) {
                 when (pitanja) {

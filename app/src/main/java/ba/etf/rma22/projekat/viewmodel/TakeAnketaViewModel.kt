@@ -31,11 +31,27 @@ class TakeAnketaViewModel {
         // Create a new coroutine on the UI thread
         scope.launch{
             // Make the network call and suspend execution until it finishes
-            val result =listOf<AnketaTaken>()//k.getPoceteAnkete()
+            val result =k.getPoceteAnkete()
             // Display result of the network request to the user
             withContext(Dispatchers.Main) {
                 when (result) {
                     is List<AnketaTaken> -> onSuccess?.invoke(result)
+                    else-> onError?.invoke()
+                }
+            }
+        }
+    }
+    fun getPoceteAnketev3( onSuccess: (pitanje: List<AnketaTaken>,position:Int) -> Unit,
+                         onError: () -> Unit,pos:Int){
+
+        // Create a new coroutine on the UI thread
+        scope.launch{
+            // Make the network call and suspend execution until it finishes
+            val result =k.getPoceteAnkete()
+            // Display result of the network request to the user
+            withContext(Dispatchers.Main) {
+                when (result) {
+                    is List<AnketaTaken> -> onSuccess?.invoke(result,pos)
                     else-> onError?.invoke()
                 }
             }

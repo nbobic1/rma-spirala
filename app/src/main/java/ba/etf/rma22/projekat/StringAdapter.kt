@@ -21,6 +21,7 @@ class StringAdapter(context: Context, @LayoutRes private val layoutResource: Int
         newView = LayoutInflater.from(context).inflate(R.layout.string_adapter, parent, false)
         val textView = newView.findViewById<TextView>(R.id.textView5)
         textView.text=elements[position]
+        if(MainActivity.connection)
         newView.setOnClickListener {
             if(!main.gotova){
                 textView.setTextColor(Color.parseColor("#0000ff"))

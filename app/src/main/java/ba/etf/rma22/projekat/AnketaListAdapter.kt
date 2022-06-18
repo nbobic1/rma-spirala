@@ -31,11 +31,15 @@ class AnketaListAdapter (private var main:MainActivity, private var anketaL :Lis
     }
     override fun getItemCount(): Int = anketaL.size
     override fun onBindViewHolder(holder: AnketaViewHolder, position: Int) {
+        println("holderrrrrrrrrrrrr")
         holder.itemView.setOnClickListener {
-           main.pitanjeAnketaViewModel.provjeraOtvaranjaA(anketaL[position].id,position, onSuccess = ::naKlik,onError=::onError)
-        }
+             main.pitanjeAnketaViewModel.provjeraOtvaranjaA(anketaL[position].id,position, onSuccess = ::naKlik,onError=::onError)
+
+            main.takeAnketaViewModel.getPoceteAnketev3(onSuccess = ::kot, onError = ::onError,position)
+       }
+        println("nakon iffffffffffffffffffffff")
        holder.anketaName.text = anketaL[position].naziv
-        val k: Double = kotlin.math.round(anketaL[position].progres / 0.2) *0.2*holder.anketaProgress.max;
+        var k: Double=kotlin.math.round(anketaL[position].progres?.div(0.2) ?: 0.0) *0.2*holder.anketaProgress.max;
         holder.anketaProgress.progress=k.roundToInt()
         holder.anketaRnum.text=anketaL[position].nazivIstrazivanja
         val context: Context = holder.anketaCircle.getContext()
@@ -48,6 +52,8 @@ class AnketaListAdapter (private var main:MainActivity, private var anketaL :Lis
     fun naKlik(mojeAnkete:List<Anketa>,buduce:List<Anketa>,uradjene:List<Anketa>,prosle:List<Anketa>,
                pita:List<Pitanje>,odg:List<Odgovor>,at:AnketaTaken,position: Int,nazivI:String)
     {
+        if(position==-3)
+            return
         if(mojeAnkete.toMutableList().contains(anketaL[position])&&!buduce.toMutableList().contains(anketaL[position]))
         {
             if(uradjene.toMutableList().contains(anketaL[position])||prosle.contains(anketaL[position]))
@@ -84,7 +90,7 @@ class AnketaListAdapter (private var main:MainActivity, private var anketaL :Lis
                     holder.anketaDatum.text="Vrijeme aktiviranja: "
             holder.anketaCircle.background= getDrawable(context,R.drawable.zuta)
         }
-        else if((anketa.datumKraj==null&&anketa.datumPocetak<date)||date<anketa.datumKraj)
+        else if((anketa.datumKraj==null&&anketa.datumPocetak!=null&& anketa.datumPocetak!! <date)||date<anketa.datumKraj)
         {
             //zelena
                 if(anketa.datumKraj!=null)
@@ -103,8 +109,14 @@ class AnketaListAdapter (private var main:MainActivity, private var anketaL :Lis
             holder.anketaCircle.background= getDrawable(context,R.drawable.crvena)
         }
     }
+    fun kot(lista:List<AnketaTaken>, position:Int)
+    {
+        main.pitanjeAnketaViewModel.provjeraOtvaranjaA(anketaL[position].id,position, onSuccess = ::naKlik,onError=::onError)
+
+    }
     fun updateAnkete(anketas: List<Anketa>) {
         this.anketaL = anketas
+        println("Updateeeeeeeeeeeeeeeeeeee")
         notifyDataSetChanged()
     }
     inner class AnketaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {

@@ -39,6 +39,7 @@ class FragmentIstrazivanje:Fragment() {
             spin1.setSelection(arr.getPosition(main.korisnik.getGod().toString()))
         spin2=view.findViewById(R.id.odabirIstrazivanja)
         spin3=view.findViewById(R.id.odabirGrupa)
+        if(MainActivity.connection)
         spin1.onItemSelectedListener=object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
@@ -46,7 +47,6 @@ class FragmentIstrazivanje:Fragment() {
                 {
                    main.istrazivanjeIGrupaViewModel.getNeupisanaIstrazivanjaZaGod((p0.getItemAtPosition(p2)as String).toInt(),
                        onSuccess = ::postaviSpin2,onError=::onError,p0.context)
-                    println("eeeeeeeeee=${(p0.getItemAtPosition(p2)as String).toInt()}")
                     spin2.onItemSelectedListener=object: AdapterView.OnItemSelectedListener{
                         override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
 
@@ -64,6 +64,7 @@ class FragmentIstrazivanje:Fragment() {
             override fun onNothingSelected(p0: AdapterView<*>?) {
             }
         }
+        if(MainActivity.connection)
         upis.setOnClickListener{
 
             main.istrazivanjeIGrupaViewModel.upisiUGrupu(indi1.get(spin3.selectedItemPosition).id, onSuccess = ::onSuccess,onError = ::onError)

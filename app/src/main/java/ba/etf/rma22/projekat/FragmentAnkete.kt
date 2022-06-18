@@ -48,6 +48,7 @@ class FragmentAnkete :Fragment() {
                     }
                     else if(p0.selectedItem.toString() == "Sve ankete")
                     {
+                        MainActivity.connection=false;
                       main.anketaViewModel.getAll(onSuccess = ::updateAdapter, onError=::onError)
                     }
                     else if(p0.selectedItem.toString()=="Urađene ankete")
@@ -78,6 +79,7 @@ class FragmentAnkete :Fragment() {
     }
     fun updateAdapter(a:List<Anketa>)
     {
+        println("u adapteruuuuuuuuuuuu ${a.size}")
         adapterAnketa.updateAnkete(a)
     }
 
