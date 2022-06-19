@@ -187,7 +187,7 @@ object IstrazivanjeIGrupaRepository {
             var response = ApiAdapter.retrofit.upisiUGrupu(idGrupa,AccountRepository.getHash())
             val responseBody = response.body()
             if (responseBody != null) {
-                if(responseBody.message.contains("je dodan u grupu"))
+               if(responseBody.message.contains("je dodan u grupu"))
                     getUpisaneGrupe()
                 return@withContext responseBody.message.contains("je dodan u grupu")
             }
@@ -215,9 +215,20 @@ object IstrazivanjeIGrupaRepository {
             else {
                 var response = ApiAdapter.retrofit.getUpisaneGrupe(AccountRepository.getHash())
                 val responseBody = response.body()
+                if (responseBody != null) {
+                    Log.i("repo","${responseBody.size}")
+                }
                 if(responseBody!=null) {
-                    responseBody.map { er->er.upisan=true }
-                    dbGrupe(responseBody)
+
+                    var zui=responseBody.map {it.copy() }
+                    for(i in zui)
+                    {
+                        i.upisan=true
+                    }
+                    dbGrupe(zui)
+
+
+                    return@withContext responseBody
                 }
                 return@withContext responseBody!!
             }

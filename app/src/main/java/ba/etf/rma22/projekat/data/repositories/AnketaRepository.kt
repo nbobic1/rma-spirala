@@ -80,8 +80,7 @@ object AnketaRepository {
     }
     suspend fun getUpisane():List<Anketa>
     {
-       Log.i("goriiiiiiiiiiiiiiiIIIIIIIIIIIII==${MainActivity.connection}","gori")
-       return withContext(Dispatchers.IO) {
+      return withContext(Dispatchers.IO) {
            if(!MainActivity.connection)
             {
                 if(context!=null) {
@@ -97,8 +96,16 @@ object AnketaRepository {
             {
                 t.addAll(getAnketeGrupe(i.id))
             }
-               t.map { er->er.upisan=true }
-               dbAnkete(t)
+               var zui=t.map { it.copy() }
+               for(i in zui)
+               {
+                   i.upisan=true
+               }
+               dbAnkete(zui)
+               for(i in t)
+               {
+                   i.grupaId=0
+               }
                    return@withContext t
             }
 

@@ -1,6 +1,5 @@
 package ba.etf.rma22.projekat
 
-
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import androidx.test.core.app.ActivityScenario
